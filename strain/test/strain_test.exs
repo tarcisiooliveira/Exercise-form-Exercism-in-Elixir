@@ -12,7 +12,6 @@ defmodule StrainTest do
   test "keep everything" do
     assert Strain.keep([1, 2, 3], fn e -> e < 10 end) == [1, 2, 3]
   end
-
   test "keep first and last" do
     assert Strain.keep([1, 2, 3], &is_odd?/1) == [1, 3]
   end
@@ -20,14 +19,12 @@ defmodule StrainTest do
   test "keep neither first nor last" do
     assert Strain.keep([1, 2, 3, 4, 5], &is_even?/1) == [2, 4]
   end
-
   test "keep strings" do
     words = ~w(apple zebra banana zombies cherimoya zelot)
     assert Strain.keep(words, &String.starts_with?(&1, "z")) == ~w(zebra zombies zelot)
   end
-
   test "keep arrays" do
-    rows = [[1, 2, 3],[5, 5, 5],[5, 1, 2],[2, 1, 2],[1, 5, 2],[2, 2, 1],[1, 2, 5]]
+    rows = [[1, 2, 3], [5, 5, 5], [5, 1, 2], [2, 1, 2], [1, 5, 2], [2, 2, 1], [1, 2, 5]]
 
     assert Strain.keep(rows, fn row -> 5 in row end) == [
              [5, 5, 5],

@@ -1,5 +1,4 @@
 defmodule Strain do
-
   @doc """
   Strain.keep([1,2,3,4],fn(x) -> x * x end)
   Given a `list` of items and a function `fun`, return the list of items where
@@ -7,18 +6,15 @@ defmodule Strain do
 
   Do not use `Enum.filter`.
   """
-  @spec keep(list :: list(any), fun :: (any -> boolean)) :: list(any)
+  # @spec keep(list :: list(any), fun :: (any -> boolean)) :: list(any)
   def keep(list, fun) do
-    lista_retorno=[]
-    lista_booleana = Enum.map(list, fun)
-    Enum.map((lista_booleana, list),
-    fn (bolean, valor)  ->
-      case bolean do
-        true -> [lista_retorno | valor]
-        false -> nil
-
-    end end)
-    lista_retorno
+    Enum.reduce(list, [], fn x, acc ->
+      case fun.(x) do
+        true -> [x | acc]
+        false -> acc
+      end
+    end)
+    |> Enum.reverse()
   end
 
   @doc """
@@ -29,14 +25,12 @@ defmodule Strain do
   """
   @spec discard(list :: list(any), fun :: (any -> boolean)) :: list(any)
   def discard(list, fun) do
-    list=Enum.map(list, fun)
-    list
+    Enum.reduce(list, [], fn x, acc ->
+      case fun.(x) do
+        false -> [x | acc]
+        true -> acc
+      end
+    end)
+    |> Enum.reverse()
   end
-
-
-
-
-
-
-
 end
