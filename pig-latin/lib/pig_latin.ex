@@ -31,8 +31,6 @@ defmodule PigLatin do
     |> Enum.join(" ")
   end
 
-  # para valer a exeção do y e do x precisa que eles sejam os primeiros
-
   defp word_inverter_consoant(word, init) do
     [head | tail] = String.graphemes(word)
     status = starts_vogal(head)
