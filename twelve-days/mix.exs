@@ -1,11 +1,11 @@
-defmodule WordCount.MixProject do
+defmodule TwelveDays.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :word_count,
+      app: :twelve_days,
       version: "0.1.0",
-      elixir: "~> 1.10",
+      # elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
