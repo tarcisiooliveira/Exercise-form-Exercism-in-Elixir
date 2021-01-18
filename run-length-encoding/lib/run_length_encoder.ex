@@ -8,12 +8,11 @@ defmodule RunLengthEncoder do
   """
   @number ~w(0 1 2 3 4 5 6 7 8 9)
   @spec encode(String.t()) :: String.t()
-  def encode("") do
-    ""
-  end
+  def encode(""), do: ""
 
   def encode(string) do
-    String.graphemes(string)
+    string
+    |> String.graphemes()
     |> count()
   end
 
@@ -43,18 +42,14 @@ defmodule RunLengthEncoder do
   end
 
   @spec decode(String.t()) :: String.t()
-  def decode("") do
-    ""
-  end
+  def decode(""), do: ""
 
   def decode(string) do
     String.graphemes(string)
     |> decode("", "")
   end
 
-  defp decode([], result, _) do
-    result
-  end
+  defp decode([], result, _), do: result
 
   defp decode(list, result, acc) do
     [head | tail] = list
