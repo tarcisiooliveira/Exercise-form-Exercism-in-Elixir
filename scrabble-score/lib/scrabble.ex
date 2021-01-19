@@ -48,5 +48,6 @@ defmodule Scrabble do
     |> String.codepoints()
     |> Enum.map(&String.upcase(&1))
     |> Enum.map(&String.trim(&1))
+    |> Enum.filter(fn x -> x !="" end)
   end
 end
