@@ -1,5 +1,4 @@
 defmodule TwelveDays do
-
   @day [
     "first",
     "second",
@@ -36,11 +35,12 @@ defmodule TwelveDays do
   @spec verse(number :: integer) :: String.t()
 
   def verse(number) do
-    "On the #{Enum.at(@day,number-1)} day of Christmas my true love gave to me:" <> complete(number)
+    "On the #{Enum.at(@day, number - 1)} day of Christmas my true love gave to me:" <>
+      complete(number)
   end
 
-  defp complete(number) when number>1 do
-    Enum.at(@gift, number-1) <> complete(number-1)
+  defp complete(number) when number > 1 do
+    Enum.at(@gift, number - 1) <> complete(number - 1)
   end
 
   defp complete(1), do: Enum.at(@gift, 0)
@@ -52,7 +52,7 @@ defmodule TwelveDays do
   @spec verses(starting_verse :: integer, ending_verse :: integer) :: String.t()
   def verses(starting_verse, ending_verse) do
     starting_verse..ending_verse
-    |> Enum.map_join("\n",&verse(&1))
+    |> Enum.map_join("\n", &verse(&1))
   end
 
   @doc """
