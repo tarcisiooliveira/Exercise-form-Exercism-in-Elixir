@@ -22,7 +22,7 @@ defmodule IsogramTest do
 
   @tag :pending
   test "isogram with dash" do
-    assert Isogram.isogram?("hjelmqvist-gryb-zock-pfund-wax")
+    assert Isogram.isogram?("hjelmqvist-gryb-zock pfund wax")
   end
 
   @tag :pending
