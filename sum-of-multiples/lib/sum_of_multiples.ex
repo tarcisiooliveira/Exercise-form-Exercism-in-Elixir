@@ -5,13 +5,9 @@ defmodule SumOfMultiples do
   @spec to(non_neg_integer, [non_neg_integer]) :: non_neg_integer
   def to(limit, factors) do
     factors
-    |> Enum.map(fn x -> get_multiples(limit - 1, x) end)
+    |> Enum.map(fn x -> Enum.map(0..Integer.floor_div(limit-1, x), &(&1 * x)) end)
     |> Enum.concat()
-    |> Enum.uniq()
-    |> Enum.reduce(fn x, acc -> x+acc end)
-  end
-
-  def get_multiples(limit, factor) do
-    Enum.map(0..Integer.floor_div(limit, factor), fn x -> x * factor end)
+    |> MapSet.new
+    |> Enum.reduce(&(&1+&2))
   end
 end

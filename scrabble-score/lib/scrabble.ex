@@ -14,40 +14,28 @@ defmodule Scrabble do
   def score(word) do
     word
     |> get_char_list
-    |> calculate(0)
-  end
-
-  defp calculate([], acc), do: acc
-
-  defp calculate([head | []], acc) do
-    cond do
-      head in @one -> acc + 1
-      head in @four -> acc + 4
-      head in @three -> acc + 3
-      head in @two -> acc + 2
-      head in @eight -> acc + 8
-      head in @ten -> acc + 10
-      head in @five -> acc + 5
-    end
-  end
-
-  defp calculate([head | tail], acc) do
-    cond do
-      head in @one -> calculate(tail, acc + 1)
-      head in @four -> calculate(tail, acc + 4)
-      head in @three -> calculate(tail, acc + 3)
-      head in @two -> calculate(tail, acc + 2)
-      head in @eight -> calculate(tail, acc + 8)
-      head in @ten -> calculate(tail, acc + 10)
-      head in @five -> calculate(tail, acc + 5)
-    end
+    |> calculate()
   end
 
   defp get_char_list(string) do
     string
+    |> String.upcase()
     |> String.codepoints()
-    |> Enum.map(&String.upcase(&1))
     |> Enum.map(&String.trim(&1))
-    |> Enum.filter(fn x -> x !="" end)
+    |> Enum.filter(&(&1 != ""))
+  end
+
+  defp calculate(word), do: Enum.reduce(word,0, &(&2+get_sum(&1)))
+
+  defp get_sum(letter) do
+    cond do
+      letter in @one -> 1
+      letter in @four -> 4
+      letter in @three -> 3
+      letter in @two -> 2
+      letter in @eight -> 8
+      letter in @ten -> 10
+      letter in @five -> 5
+    end
   end
 end
