@@ -1,4 +1,5 @@
 defmodule School do
+
   @moduledoc """
   Simulate students in a school.
 
@@ -10,6 +11,7 @@ defmodule School do
   """
   @spec add(map, String.t(), integer) :: map
   def add(db, name, grade) do
+    Map.update(db, grade, [name], fn agregate -> [name | agregate] end)
   end
 
   @doc """
@@ -17,6 +19,7 @@ defmodule School do
   """
   @spec grade(map, integer) :: [String.t()]
   def grade(db, grade) do
+    Map.get(db,grade,[])
   end
 
   @doc """
@@ -24,5 +27,7 @@ defmodule School do
   """
   @spec sort(map) :: [{integer, [String.t()]}]
   def sort(db) do
+    db
+     |> Enum.map(fn {key,value} -> {key , Enum.sort(value)} end)
   end
 end
