@@ -5,48 +5,39 @@ defmodule MatchingBrackets do
   Checks that all the brackets and braces in the string are matched correctly, and nested correctly
   """
   @spec check_brackets(String.t()) :: boolean
-  def check_brackets(""), do: true
-
   def check_brackets(str) do
     str
+    |> String.replace(~r/[^\(\)\[\]\{\}]/, "")
     |> String.codepoints()
     |> check([])
   end
 
-  defp check([head | []], []), do: true
-
-  defp check([head | []], open_list) do
+  defp check([], []), do: true
+  defp check([_ | []], []), do: true
+  defp check([head | []], opening_list) do
     cond do
-      head in @open && open_list == [] -> false
-      head in @open && get_closer(head) == false -> false
-      true -> remove(head, open_list)
+      get_closer(head) == false -> false
+      true -> if(Enum.at(opening_list, -1) == get_closer(head), do: true, else: false)
     end
   end
-
-  defp check([head | tail] = lista, list) do
+  defp check([head | tail], opening_list) do
     cond do
-      head in @open -> check(tail, list ++ [head])
-      head in @close -> remove(head, tail, list)
-      true -> check(tail, list)
+      head in @open -> check(tail, opening_list ++ [head])
+      head in @close -> remove(head, tail, opening_list)
+      true -> check(tail, opening_list)
     end
   end
-
-  defp remove(head, list), do: if(Enum.at(list, -1) == get_closer(head), do: true)
-
-  defp remove(head, tail, list) do
-    if(Enum.at(list, -1) == get_closer(head)) do
-      check(tail, List.delete_at(list, -1))
-    else
-      false
-    end
+  defp remove(head, tail, opening_list) do
+    if(Enum.at(opening_list, -1) == get_closer(head),
+      do: check(tail, List.delete_at(opening_list, -1))
+    )
   end
-
   defp get_closer(char) do
-    cond do
-      char == ")" -> "("
-      char == "]" -> "["
-      char == "}" -> "{"
-      true -> false
+    case char do
+      ")" -> "("
+      "]" -> "["
+      "}" -> "{"
+      _ -> false
     end
   end
 end
