@@ -15,12 +15,10 @@ defmodule Bob do
         "Calm down, I know what I'm doing!"
 
 
-        String.ends_with?(input,"?") and
-        replace_digits(input)|>String.length()>1 and
-        contains_downcase(input)==true
-       ->
-        IO.inspect("SAída -> #{input}")
-        "Sure."
+      String.ends_with?(input,"?") and
+      replace_digits(input)|>String.length()>1 and
+      contains_downcase(input)==true ->
+      "Sure."
 
       replace_digits(input)
       |> contains_downcase()==false and
@@ -40,11 +38,5 @@ defmodule Bob do
   defp contains_upcase(input), do: String.match?(input, ~r/[[:upper:]]/)
   defp replace_digits(input), do: String.replace(input, ~r/[[:digit:]\t\:\)\(\)\n\r\! ]/, "")
 
-  # defp question(input) do
-  #   if contains_downcase(input) doz
-  #     "Calm down, I know what I'm doing!"
-  #   else
-  #     "Sure."
-  #   end
-  # end
+
 end
