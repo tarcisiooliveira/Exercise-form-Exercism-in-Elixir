@@ -1,5 +1,7 @@
 defmodule CollatzConjecture do
-  import Integer
+  require Integer
+  #thaks to chriseyre2000 Mentor
+  #because Integer is a Macro and they are expanded at compile time.
 
   @doc """
   calc/1 takes an integer and returns the number of steps required to get the

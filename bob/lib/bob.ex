@@ -6,9 +6,6 @@ defmodule Bob do
       input == "" ->
         "Fine. Be that way!"
 
-      String.match?(input, ~r/^\s/) == true ->
-        "Fine. Be that way!"
-
       String.ends_with?(input, "?") and
         String.downcase(input) != input and
           input == String.upcase(input) ->
