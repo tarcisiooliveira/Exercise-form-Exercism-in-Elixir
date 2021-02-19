@@ -1,76 +1,81 @@
 defmodule Phone do
-  @doc """
-  Remove formatting from a phone number.
-
-  Returns "0000000000" if phone number is not valid
-  (10 digits or "1" followed by 10 digits)
-
-  ## Examples
-
-  iex> Phone.number("212-555-0100")
-  "2125550100"
-
-  iex> Phone.number("+1 (212) 555-0100")
-  "2125550100"
-
-  iex> Phone.number("+1 (212) 055-0100")
-  "0000000000"
-
-  iex> Phone.number("(212) 555-0100")
-  "2125550100"
-
-  iex> Phone.number("867.5309")
-  "0000000000"
-  """
   @spec number(String.t()) :: String.t()
   def number(raw) do
+    input = treatment(raw)
+
+    cond do
+      String.replace(input, ~r/[[:alpha:]]/, "") != input ->
+        "0000000000"
+
+      String.length(input) == 11 and !invalid_n_situation(input) and
+          String.at(input, String.length(input) - 11) == "1" ->
+        length = String.length(input)
+        String.slice(input, 1..length)
+
+      String.length(input) == 10 and !invalid_n_situation(input) ->
+        input
+
+      true ->
+        "0000000000"
+    end
   end
 
-  @doc """
-  Extract the area code from a phone number
-
-  Returns the first three digits from a phone number,
-  ignoring long distance indicator
-
-  ## Examples
-
-  iex> Phone.area_code("212-555-0100")
-  "212"
-
-  iex> Phone.area_code("+1 (212) 555-0100")
-  "212"
-
-  iex> Phone.area_code("+1 (012) 555-0100")
-  "000"
-
-  iex> Phone.area_code("867.5309")
-  "000"
-  """
   @spec area_code(String.t()) :: String.t()
   def area_code(raw) do
+    treatment(raw)
+    |> valid_area_cod?()
   end
 
-  @doc """
-  Pretty print a phone number
+  defp valid_area_cod?(number) do
+    length = String.length(number)
 
-  Wraps the area code in parentheses and separates
-  exchange and subscriber number with a dash.
+    cond do
+      String.length(number) >= 10 ->
+        if String.at(number, String.length(number) - 10) in ["0", "1"] do
+          "000"
+        else
+          String.slice(number, (length - 10)..(length - 8))
+        end
 
-  ## Examples
+      true ->
+        "000"
+    end
+  end
 
-  iex> Phone.pretty("212-555-0100")
-  "(212) 555-0100"
+  defp invalid_n_situation(string) do
+    if String.at(string, String.length(string) - 7) in ["0", "1"] or
+         String.at(string, String.length(string) - 10) in ["0", "1"],
+       do: true,
+       else: false
+  end
 
-  iex> Phone.pretty("212-155-0100")
-  "(000) 000-0000"
-
-  iex> Phone.pretty("+1 (303) 555-1212")
-  "(303) 555-1212"
-
-  iex> Phone.pretty("867.5309")
-  "(000) 000-0000"
-  """
   @spec pretty(String.t()) :: String.t()
   def pretty(raw) do
+    input = treatment(raw)
+
+    cond do
+      String.length(input) in 7..9 ->
+        "(000) 000-0000"
+
+      String.length(input) == 10 and !invalid_n_situation(input) ->
+        insert_parameters(input)
+
+      String.length(input) == 11 and !invalid_n_situation(input) ->
+        String.slice(input, 1, String.length(input))
+        |> insert_parameters()
+
+      true ->
+        "(000) 000-0000"
+    end
   end
+
+  defp insert_parameters(input) do
+    to_charlist(input)
+    |> List.insert_at(6, '-')
+    |> List.insert_at(3, ') ')
+    |> List.insert_at(0, '(')
+    |> to_string
+  end
+
+  defp treatment(raw), do: String.replace(raw, ~r/[[:cntrl:]\)\(\s\-\+\.]/, "")
 end
