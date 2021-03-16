@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+    servicoelixir:
+      build: .
+      volumes:  
+        - /home/tarta/workspace/exercism/elixir/robot-simulator/:/app
